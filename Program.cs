@@ -1,9 +1,9 @@
 ﻿using System;
 
 
-namespace Interview_Refactor1
+namespace BarryTheBaker
 {
-    class Program
+    class BakeryStart
     {
         static void Main(string[] args)
         {
@@ -12,48 +12,66 @@ namespace Interview_Refactor1
             // this is intended to run on .NET Core
 
             var applePieCalculator = new ApplePieQuantityCalculator();
-            int apples = 0, sugar = 0, flour = 0, cinnamon = 0;
+            var userIngredientInput = new ApplePieIngredients(){
+                   Apples =  0, 
+                   Sugar = 0, 
+                   Flour = 0, 
+                   Cinnamon = 0,
+                   Butter = 0
+                };
+            
             // this currently doesnt account for negative numbers
             do
             {
                 Console.WriteLine("How many apples do you have?");
-                if(!int.TryParse(Console.ReadLine(), out apples)){
+                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Apples)){
                     Console.WriteLine("Must be a number");
                     continue;
                 } 
 
                 Console.WriteLine("How much sugar do you have (in lbs)?");
-                if(!int.TryParse(Console.ReadLine(), out sugar)){
+                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Sugar)){
                     Console.WriteLine("Must be a number");
                     continue;
                 }   
 
                 Console.WriteLine("How much flour do you have (in lbs)?");
-                if(!int.TryParse(Console.ReadLine(), out flour)){
+                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Flour)){
                     Console.WriteLine("Must be a number");
                     continue;
                 }
 
                 Console.WriteLine("How much cinnamon do you have (in tsp)?");
-                if(!int.TryParse(Console.ReadLine(), out cinnamon)){
+                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Cinnamon)){
+                    Console.WriteLine("Must be a number");
+                    continue;
+                }
+
+                
+                Console.WriteLine("How much sticks of butter do you have?");
+                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Butter)){
                     Console.WriteLine("Must be a number");
                     continue;
                 }
                 
-                var pieCounts = applePieCalculator.MaxNumberOfPies(apples, sugar, flour, cinnamon);
+                // now we need to figure out how many pies we can make
+                var pieCounts = applePieCalculator.MaxNumberOfPies(userIngredientInput);
+
+
+                // and now, lets print some stuff
                 Console.WriteLine($"\n\nYou can make: {pieCounts.Item1} apple pies!");
                 Console.WriteLine($"   {pieCounts.Item2} apple pies with cinnamon");
                 Console.WriteLine($"   {pieCounts.Item1 - pieCounts.Item2} apple pies WITHOUT cinnamon");
 
-                var remainingIngredients = applePieCalculator.CalculateLeftOverIngredients(pieCounts.Item1, apples, sugar, flour, cinnamon);
+                var remainingIngredients = applePieCalculator.CalculateLeftOverIngredients(pieCounts.Item1, userIngredientInput);
                 Console.WriteLine("You have the following ingredients left over:");
                 Console.WriteLine($"   Apples {remainingIngredients.Apples}");
                 Console.WriteLine($"   Sugar {remainingIngredients.Sugar}");
                 Console.WriteLine($"   Flour {remainingIngredients.Flour}");
                 Console.WriteLine($"   Cinnamon {remainingIngredients.Cinnamon}");
-
-                Console.WriteLine("\n\nEnter to calculate, 'q' to quit!");
+                Console.WriteLine($"   Butter {remainingIngredients.Butter}");
             } while (!DoesUserWantToQuit());
+
         }
 
         public static bool DoesUserWantToQuit(){
@@ -65,33 +83,62 @@ namespace Interview_Refactor1
 
     public class ApplePieQuantityCalculator
     {
-        public Tuple<int,int> MaxNumberOfPies(int apples, int sugar, int flour, int cinnamon){
-            var usedApples = apples / 3;
-            var usedSugar = sugar / 2;
-            var maxPies = Math.Min(Math.Min(usedApples, usedSugar), flour);
+        private ApplePieRecipe recipe;
+
+        public ApplePieQuantityCalculator(){
+            recipe = new ApplePieRecipe();
+        }
+
+        public Tuple<int,int> MaxNumberOfPies(ApplePieIngredients availabbleIngredients){
+            var usedApples = availabbleIngredients.Apples / recipe.Ingredients.Apples;
+            var usedSugar = availabbleIngredients.Sugar / recipe.Ingredients.Sugar;
+            // 1 stick = 8 tbsp, but we only need 6
+            var totalTbspButter = availabbleIngredients.Butter * 8; //TODO need to move this calculation to a better spot
+            var usedButter = totalTbspButter / recipe.Ingredients.Butter;
+
+            // flour is the denominator, but we need to make sure there is not another ingredient that we have less of
+            var maxNumberOfIngredientsUsed = new List<int>(){usedApples, usedSugar, usedButter, availabbleIngredients.Flour};
+            var maxPies = maxNumberOfIngredientsUsed.Min(); // Math.Min(Math.Min(usedApples, usedSugar), availabbleIngredients.Flour);
                
             // cinnamon is used until it is exhausted, so it's straight forward 
             // in that we just need the minimum since it's 1 tsp per 1 pie
-            var piesWithCinnamon = Math.Min(maxPies, cinnamon);
+            var piesWithCinnamon = Math.Min(maxPies, availabbleIngredients.Cinnamon);
             return Tuple.Create(maxPies, piesWithCinnamon);
         }
 
-        public RemainingIngredients CalculateLeftOverIngredients(int maxPies, int apples, int sugar, int flour, int cinnamon){
-            var remainingIngredients = new RemainingIngredients(){
-                Apples = apples - (maxPies * 3),
-                Sugar = sugar - (maxPies * 2),
-                Flour = flour - maxPies,
-                Cinnamon = Math.Max(cinnamon - maxPies, 0),
+        public ApplePieIngredients CalculateLeftOverIngredients(int maxPies, ApplePieIngredients availableIngredients){
+            var remainingIngredients = new ApplePieIngredients(){
+                Apples = availableIngredients.Apples - (maxPies * 3),
+                Sugar = availableIngredients.Sugar - (maxPies * 2),
+                Flour = availableIngredients.Flour - maxPies,
+                Cinnamon = Math.Max(availableIngredients.Cinnamon - maxPies, 0),
+                Butter = (availableIngredients.Butter * 8) - (maxPies * 6),
             };
             return remainingIngredients;
         } 
     }
 
-    public class RemainingIngredients
+    public class ApplePieRecipe {
+        public readonly ApplePieIngredients Ingredients;
+
+        public ApplePieRecipe(){
+            Ingredients = new ApplePieIngredients {
+                Apples = 2,
+                Sugar = 2,
+                Flour = 1,
+                Cinnamon = 1,
+                Butter = 6, // in tbsp
+            };
+        }
+    }
+
+    public class ApplePieIngredients
     {
-            public int Apples {get;set;}
-            public int Sugar {get;set;}
-            public int Flour {get;set;}
-            public int Cinnamon {get;set;}
+            public int Apples;
+            public int Sugar;
+            public int Flour;
+            public int Cinnamon;
+            public int Butter; // in tbsp
     }
 }
+
