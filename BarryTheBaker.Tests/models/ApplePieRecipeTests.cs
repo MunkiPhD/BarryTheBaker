@@ -1,7 +1,7 @@
 namespace BarryTheBaker.Tests;
 using Xunit;
 
-public class UnitTest1
+public class ApplePieRecipeTests
 {
     [Fact]
     public void ApplePieRecipe_HasIngredients()
