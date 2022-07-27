@@ -18,6 +18,6 @@ public class ApplePieRecipeTests
         Assert.Equal(2, ingredients[Ingredient.Sugar]);
         Assert.Equal(1, ingredients[Ingredient.Flour]);
         Assert.Equal(1, ingredients[Ingredient.Cinnamon]);
-        Assert.Equal(6, ingredients[Ingredient.ButterTbsp]);
+        Assert.Equal(6, ingredients[Ingredient.Butter]);
     }
 }

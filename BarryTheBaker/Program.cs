@@ -53,7 +53,7 @@ namespace BarryTheBaker
                 userIngredientInput.Add(Ingredient.Apples, apples);
                 userIngredientInput.Add(Ingredient.Sugar, sugar);
                 userIngredientInput.Add(Ingredient.Flour, flour);
-                userIngredientInput.Add(Ingredient.ButterTbsp, butter);
+                userIngredientInput.Add(Ingredient.Butter, butter);
                 userIngredientInput.Add(Ingredient.Cinnamon, cinnamon);
                 // now we need to figure out how many pies we can make
                 var pieCounts = applePieCalculator.MaxNumberOfPies(userIngredientInput);

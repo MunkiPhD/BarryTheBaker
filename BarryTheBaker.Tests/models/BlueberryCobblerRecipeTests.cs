@@ -4,13 +4,15 @@ public class BlueberryCobblerRecipeTests {
     [Fact]
     public void BlueberryCobblerRecipe_HasCorrectIngredientQuantities(){
         BlueberryCobblerRecipe recipe = new BlueberryCobblerRecipe();
-        var ingredients = recipe.Ingredients;
-        Assert.Equal(4, ingredients[Ingredient.Blueberries]);
-        Assert.Equal(1, ingredients[Ingredient.LemonZest]);
-        Assert.Equal(5, ingredients[Ingredient.ButterTbsp]);
-        Assert.Equal(1, ingredients[Ingredient.Flour]);
-        Assert.Equal(1, ingredients[Ingredient.Sugar]);
-        Assert.Equal(1, ingredients[Ingredient.Milk]);
-        Assert.Equal(1, ingredients[Ingredient.Cinnamon]);
+        Assert.Equal(4, recipe.Ingredients[Ingredient.Blueberries].Quantity);
+        Assert.Equal(4, recipe.Ingredients[Ingredient.Blueberries].Quantity);
+        Assert.Equal(1, recipe.Ingredients[Ingredient.LemonZest].Quantity);
+        Assert.Equal(5, recipe.Ingredients[Ingredient.Butter].Quantity);
+        Assert.Equal(1, recipe.Ingredients[Ingredient.Flour].Quantity);
+        Assert.Equal(1, recipe.Ingredients[Ingredient.Sugar].Quantity);
+        Assert.Equal(1, recipe.Ingredients[Ingredient.Milk].Quantity);
+        Assert.Equal(1, recipe.Ingredients[Ingredient.Cinnamon].Quantity);
+
+
     }
 }

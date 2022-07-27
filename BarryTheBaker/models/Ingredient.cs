@@ -2,7 +2,7 @@ public enum Ingredient {
     Apples,
     Sugar,
     Flour,
-    ButterTbsp,
+    Butter,
     Blueberries,
     LemonZest,
     Milk,

@@ -9,7 +9,7 @@ public class ApplePieRecipe {
         Ingredients.Add(Ingredient.Sugar, 2);
         Ingredients.Add(Ingredient.Flour, 1);
         Ingredients.Add(Ingredient.Cinnamon, 1);
-        Ingredients.Add(Ingredient.ButterTbsp, 6);
+        Ingredients.Add(Ingredient.Butter, 6);
     }
 }
 

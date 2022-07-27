@@ -4,7 +4,7 @@ public static class IngredientList {
         newList.Add(Ingredient.Apples, 0);
         newList.Add(Ingredient.Sugar, 0);
         newList.Add(Ingredient.Flour, 0);
-        newList.Add(Ingredient.ButterTbsp, 0);
+        newList.Add(Ingredient.Butter, 0);
         newList.Add(Ingredient.Blueberries, 0);
         newList.Add(Ingredient.LemonZest, 0);
         newList.Add(Ingredient.Milk, 0);

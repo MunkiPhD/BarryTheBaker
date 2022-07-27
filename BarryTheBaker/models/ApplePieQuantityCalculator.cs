@@ -10,8 +10,8 @@ public class ApplePieQuantityCalculator
             decimal usedApples = Math.Floor((decimal) availableIngredients[Ingredient.Apples] / recipe.Ingredients[Ingredient.Apples]);
             decimal usedSugar = Math.Floor((decimal) availableIngredients[Ingredient.Sugar] / recipe.Ingredients[Ingredient.Sugar]);
             // 1 stick = 8 tbsp, but we only need 6
-            decimal totalTbspButter = Math.Floor( (decimal) availableIngredients[Ingredient.ButterTbsp] * 8); //TODO need to move this calculation to a better spot
-            decimal usedButter = Math.Floor((decimal) totalTbspButter / recipe.Ingredients[Ingredient.ButterTbsp]);
+            decimal totalTbspButter = Math.Floor( (decimal) availableIngredients[Ingredient.Butter] * 8); //TODO need to move this calculation to a better spot
+            decimal usedButter = Math.Floor((decimal) totalTbspButter / recipe.Ingredients[Ingredient.Butter]);
 
             // flour is the denominator, but we need to make sure there is not another ingredient that we have less of
             var maxNumberOfIngredientsUsed = new List<decimal>(){usedApples, usedSugar, usedButter, availableIngredients[Ingredient.Flour]};
@@ -31,7 +31,7 @@ public class ApplePieQuantityCalculator
             usedIngredients.Sugar = recipe.Ingredients[Ingredient.Sugar] * maxPies;
             usedIngredients.Flour = recipe.Ingredients[Ingredient.Flour] *  maxPies;
             usedIngredients.Cinnamon = recipe.Ingredients[Ingredient.Cinnamon] * maxPies;
-            usedIngredients.Butter = recipe.Ingredients[Ingredient.ButterTbsp] * maxPies;
+            usedIngredients.Butter = recipe.Ingredients[Ingredient.Butter] * maxPies;
 
             // calculate how many ingredients we have left based on what was used
             var remainingIngredients = new ApplePieIngredients(){
@@ -39,7 +39,7 @@ public class ApplePieQuantityCalculator
                 Sugar = availableIngredients[Ingredient.Sugar] - usedIngredients.Sugar,
                 Flour = availableIngredients[Ingredient.Flour] - usedIngredients.Flour,
                 Cinnamon = availableIngredients[Ingredient.Cinnamon] - usedIngredients.Cinnamon,
-                Butter = availableIngredients[Ingredient.ButterTbsp] - usedIngredients.Butter,
+                Butter = availableIngredients[Ingredient.Butter] - usedIngredients.Butter,
             };
 
             return remainingIngredients;
