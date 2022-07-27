@@ -49,12 +49,12 @@ namespace BarryTheBaker
                     continue;
                 }
                 
-                var userIngredientInput = new Dictionary<Ingredient, int>();
-                userIngredientInput.Add(Ingredient.Apples, apples);
-                userIngredientInput.Add(Ingredient.Sugar, sugar);
-                userIngredientInput.Add(Ingredient.Flour, flour);
-                userIngredientInput.Add(Ingredient.Butter, butter);
-                userIngredientInput.Add(Ingredient.Cinnamon, cinnamon);
+                var userIngredientInput = new Dictionary<Ingredient, RecipeIngredient>();
+                userIngredientInput.Add(Ingredient.Apples, new RecipeIngredient(Ingredient.Apples, apples, MeasurementType.Unit));
+                userIngredientInput.Add(Ingredient.Sugar,  new RecipeIngredient(Ingredient.Sugar, sugar, MeasurementType.Pounds));
+                userIngredientInput.Add(Ingredient.Flour,  new RecipeIngredient(Ingredient.Flour, flour, MeasurementType.Pounds));
+                userIngredientInput.Add(Ingredient.Butter,  new RecipeIngredient(Ingredient.Butter, butter * 8, MeasurementType.Tbsp));
+                userIngredientInput.Add(Ingredient.Cinnamon,  new RecipeIngredient(Ingredient.Cinnamon, cinnamon, MeasurementType.Tsp));
                 // now we need to figure out how many pies we can make
                 var pieCounts = applePieCalculator.MaxNumberOfPies(userIngredientInput);
 
@@ -66,11 +66,11 @@ namespace BarryTheBaker
 
                 var remainingIngredients = applePieCalculator.CalculateLeftOverIngredients(pieCounts.Item1, userIngredientInput);
                 Console.WriteLine("You have the following ingredients left over:");
-                Console.WriteLine($"   Apples {remainingIngredients.Apples}");
-                Console.WriteLine($"   Sugar {remainingIngredients.Sugar}");
-                Console.WriteLine($"   Flour {remainingIngredients.Flour}");
-                Console.WriteLine($"   Cinnamon {remainingIngredients.Cinnamon}");
-                Console.WriteLine($"   Butter {remainingIngredients.Butter}");
+                Console.WriteLine($"   Apples {remainingIngredients[Ingredient.Apples].Quantity}");
+                Console.WriteLine($"   Sugar {remainingIngredients[Ingredient.Sugar].Quantity}");
+                Console.WriteLine($"   Flour {remainingIngredients[Ingredient.Flour].Quantity}");
+                Console.WriteLine($"   Cinnamon {remainingIngredients[Ingredient.Cinnamon].Quantity}");
+                Console.WriteLine($"   Butter {remainingIngredients[Ingredient.Butter].Quantity}");
             } while (!DoesUserWantToQuit());
 
         }
