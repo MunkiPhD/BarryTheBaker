@@ -13,10 +13,11 @@ public class ApplePieRecipeTests
     [Fact]
     public void ApplePieRecipe_HasCorrectIngredientCounts(){
         var applePieRecipe = new ApplePieRecipe();
-        Assert.Equal(2, applePieRecipe.Ingredients.Apples);
-        Assert.Equal(2, applePieRecipe.Ingredients.Sugar);
-        Assert.Equal(1, applePieRecipe.Ingredients.Flour);
-        Assert.Equal(1, applePieRecipe.Ingredients.Cinnamon);
-        Assert.Equal(6, applePieRecipe.Ingredients.Butter);
+        var ingredients = applePieRecipe.Ingredients;
+        Assert.Equal(2, ingredients[Ingredient.Apples]);
+        Assert.Equal(2, ingredients[Ingredient.Sugar]);
+        Assert.Equal(1, ingredients[Ingredient.Flour]);
+        Assert.Equal(1, ingredients[Ingredient.Cinnamon]);
+        Assert.Equal(6, ingredients[Ingredient.ButterTbsp]);
     }
 }

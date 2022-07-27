@@ -15,7 +15,7 @@ public class ApplePieQuantityCalculatorTests {
 
     [Fact]
     public void NotEnoughIngredients_ReturnsZeroPies(){
-        var ingredients = new ApplePieIngredients();
+        var ingredients = IngredientList.CreateEmptyList();
         var calculator = new ApplePieQuantityCalculator();
         var maxPies = calculator.MaxNumberOfPies(ingredients);
         Assert.Equal(0, maxPies.Item1);
@@ -37,7 +37,7 @@ public class ApplePieQuantityCalculatorTests {
     {
         // Given
         var ingredients = new ApplePieRecipe().Ingredients;
-        ingredients.Cinnamon = 0;
+        ingredients[Ingredient.Cinnamon] = 0;
         var calculator = new ApplePieQuantityCalculator();
         var maxPies = calculator.MaxNumberOfPies(ingredients);
         Assert.Equal(1, maxPies.Item1);
@@ -61,11 +61,11 @@ public class ApplePieQuantityCalculatorTests {
     public void CalculateLeftOverIngredients_WithExtraIngredients_ReturnsCorrectLeftovers(){
         var applePie = new ApplePieRecipe();
         var ingredients = applePie.Ingredients;
-        ingredients.Apples += 1;
-        ingredients.Butter += 1;
-        ingredients.Cinnamon += 1;
-        ingredients.Flour += 1;
-        ingredients.Sugar += 1;
+        ingredients[Ingredient.Apples] += 1;
+        ingredients[Ingredient.ButterTbsp] += 1;
+        ingredients[Ingredient.Cinnamon] += 1;
+        ingredients[Ingredient.Flour] += 1;
+        ingredients[Ingredient.Sugar] += 1;
 
         var calculator = new ApplePieQuantityCalculator();
         var maxPies = calculator.MaxNumberOfPies(ingredients);
@@ -81,21 +81,21 @@ public class ApplePieQuantityCalculatorTests {
     [Fact]
     public void CalculateLeftOverIngredients_WithLessThanNeededQuantities_ReturnsCorrectLeftovers(){
         var applePie = new ApplePieRecipe();
-        var ingredients = applePie.Ingredients;
-        ingredients.Apples -= 1;
-        ingredients.Butter -= 1;
-        ingredients.Cinnamon -= 1;
-        ingredients.Flour -= 1;
-        ingredients.Sugar -= 1;
+        var ingredients = IngredientList.CreateEmptyList();
+        ingredients[Ingredient.Apples] = applePie.Ingredients[Ingredient.Apples]-1;
+        ingredients[Ingredient.ButterTbsp] = applePie.Ingredients[Ingredient.ButterTbsp]-1;
+        ingredients[Ingredient.Cinnamon] = applePie.Ingredients[Ingredient.Cinnamon]-1;
+        ingredients[Ingredient.Flour] = applePie.Ingredients[Ingredient.Flour]-1;
+        ingredients[Ingredient.Sugar] = applePie.Ingredients[Ingredient.Sugar]-1;
 
         var calculator = new ApplePieQuantityCalculator();
         var maxPies = calculator.MaxNumberOfPies(ingredients);
         
         var leftoverIngredients = calculator.CalculateLeftOverIngredients(maxPies.Item1, ingredients);
-        Assert.Equal(ingredients.Apples, leftoverIngredients.Apples);
-        Assert.Equal(ingredients.Butter, leftoverIngredients.Butter);
-        Assert.Equal(ingredients.Cinnamon, leftoverIngredients.Cinnamon);
-        Assert.Equal(ingredients.Flour, leftoverIngredients.Flour);
-        Assert.Equal(ingredients.Sugar, leftoverIngredients.Sugar);
+        Assert.Equal(ingredients[Ingredient.Apples], leftoverIngredients.Apples);
+        Assert.Equal(ingredients[Ingredient.ButterTbsp], leftoverIngredients.Butter);
+        Assert.Equal(ingredients[Ingredient.Cinnamon], leftoverIngredients.Cinnamon);
+        Assert.Equal(ingredients[Ingredient.Flour], leftoverIngredients.Flour);
+        Assert.Equal(ingredients[Ingredient.Sugar], leftoverIngredients.Sugar);
     }
 }

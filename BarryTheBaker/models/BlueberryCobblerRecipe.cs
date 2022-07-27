@@ -13,13 +13,3 @@ public class BlueberryCobblerRecipe {
     }
 }
 
-public enum Ingredient {
-    Apples,
-    Sugar,
-    Flour,
-    ButterTbsp,
-    Blueberries,
-    LemonZest,
-    Milk,
-    Cinnamon,
-}

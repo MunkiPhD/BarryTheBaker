@@ -12,48 +12,49 @@ namespace BarryTheBaker
             // this is intended to run on .NET Core
 
             var applePieCalculator = new ApplePieQuantityCalculator();
-            var userIngredientInput = new ApplePieIngredients(){
-                   Apples =  0, 
-                   Sugar = 0, 
-                   Flour = 0, 
-                   Cinnamon = 0,
-                   Butter = 0
-                };
+            int apples, sugar, flour, cinnamon, butter = 0;
+
             
             // this currently doesnt account for negative numbers
             do
             {
                 Console.WriteLine("How many apples do you have?");
-                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Apples)){
+                if(!int.TryParse(Console.ReadLine(), out apples)){
                     Console.WriteLine("Must be a number");
                     continue;
                 } 
 
                 Console.WriteLine("How much sugar do you have (in lbs)?");
-                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Sugar)){
+                if(!int.TryParse(Console.ReadLine(), out sugar)){
                     Console.WriteLine("Must be a number");
                     continue;
                 }   
 
                 Console.WriteLine("How much flour do you have (in lbs)?");
-                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Flour)){
+                if(!int.TryParse(Console.ReadLine(), out flour)){
                     Console.WriteLine("Must be a number");
                     continue;
                 }
 
                 Console.WriteLine("How much cinnamon do you have (in tsp)?");
-                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Cinnamon)){
+                if(!int.TryParse(Console.ReadLine(), out cinnamon)){
                     Console.WriteLine("Must be a number");
                     continue;
                 }
 
                 
                 Console.WriteLine("How much sticks of butter do you have?");
-                if(!int.TryParse(Console.ReadLine(), out userIngredientInput.Butter)){
+                if(!int.TryParse(Console.ReadLine(), out butter)){
                     Console.WriteLine("Must be a number");
                     continue;
                 }
                 
+                var userIngredientInput = new Dictionary<Ingredient, int>();
+                userIngredientInput.Add(Ingredient.Apples, apples);
+                userIngredientInput.Add(Ingredient.Sugar, sugar);
+                userIngredientInput.Add(Ingredient.Flour, flour);
+                userIngredientInput.Add(Ingredient.ButterTbsp, butter);
+                userIngredientInput.Add(Ingredient.Cinnamon, cinnamon);
                 // now we need to figure out how many pies we can make
                 var pieCounts = applePieCalculator.MaxNumberOfPies(userIngredientInput);
 
