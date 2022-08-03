@@ -6,21 +6,16 @@ public class ApplePieQuantityCalculator
             recipe = new ApplePieRecipe();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="availableIngredients"></param>
+        /// <returns>tuple with MaxPies, PiesWithCinnamon</returns>
         public Tuple<int,int> MaxNumberOfPies(IDictionary<Ingredient, RecipeIngredient> availableIngredients){
-            decimal usedApples = Math.Floor((decimal) availableIngredients[Ingredient.Apples].Quantity / recipe.Ingredients[Ingredient.Apples].Quantity);
-            decimal usedSugar = Math.Floor((decimal) availableIngredients[Ingredient.Sugar].Quantity / recipe.Ingredients[Ingredient.Sugar].Quantity);
-            // 1 stick = 8 tbsp, but we only need 6
-            decimal totalTbspButter = Math.Floor( (decimal) availableIngredients[Ingredient.Butter].Quantity * 8); //TODO need to move this calculation to a better spot
-            decimal usedButter = Math.Floor((decimal) totalTbspButter / recipe.Ingredients[Ingredient.Butter].Quantity);
-
-            // flour is the denominator, but we need to make sure there is not another ingredient that we have less of
-            var maxNumberOfIngredientsUsed = new List<decimal>(){usedApples, usedSugar, usedButter, availableIngredients[Ingredient.Flour].Quantity};
-            int maxPies = (int)maxNumberOfIngredientsUsed.Min(); // Math.Min(Math.Min(usedApples, usedSugar), availabbleIngredients.Flour);
-               
-            // cinnamon is used until it is exhausted, so it's straight forward 
-            // in that we just need the minimum since it's 1 tsp per 1 pie
-            int piesWithCinnamon = Math.Min(maxPies, (int)availableIngredients[Ingredient.Cinnamon].Quantity);
-            return Tuple.Create(maxPies, piesWithCinnamon);
+            var calculator = new RecipeCreationCalculator();
+            var results = calculator.MaxQuantity(new ApplePieRecipe(), availableIngredients);
+            decimal piesWithCinnamon = availableIngredients[Ingredient.Cinnamon].Quantity - results.RemainingIngredients[Ingredient.Cinnamon].Quantity;
+            return Tuple.Create(results.MaxQuantity, (int) piesWithCinnamon);
         }
 
         public IDictionary<Ingredient, RecipeIngredient> CalculateLeftOverIngredients(int maxPies, IDictionary<Ingredient, RecipeIngredient> availableIngredients){
