@@ -17,12 +17,18 @@ namespace BarryTheBaker
                 // everytime we go through the loop, we want to make sure we clear out all the items
                 userInputIngredients.Clear();
 
-                AskUserForInput("How many apples do you have?", Ingredient.Apples, MeasurementType.Unit);
-                AskUserForInput("How much sugar do you have (in lbs)?", Ingredient.Sugar, MeasurementType.Pounds);
-                AskUserForInput("How much flour do you have (in lbs)?", Ingredient.Flour, MeasurementType.Pounds);
-                AskUserForInput("How much cinnamon do you have (in tsp)?", Ingredient.Cinnamon, MeasurementType.Tsp);
-                AskUserForInput("How much sticks of butter do you have?", Ingredient.Butter, MeasurementType.Tbsp);
-              
+                // this will need to get nuked once we add the cobbler
+                IRecipe applePieRecipe = new ApplePieRecipe();
+
+                foreach(var ingredient in applePieRecipe.Ingredients){
+                    RecipeIngredient recipeIngredient = ingredient.Value;
+                    var userIngredientInput = AskUserForIngredientQuantity($"Quantity of {recipeIngredient.Ingredient} in inventory?", recipeIngredient.Ingredient, recipeIngredient.Measurement);
+                     if(userIngredientInput != null) {
+                        userInputIngredients.Add(userIngredientInput.Ingredient, userIngredientInput);
+                    } else { 
+                        break;
+                    }
+                }
 
                 // now we need to figure out how many pies we can make
                 var applePieCalculator = new ApplePieQuantityCalculator();
@@ -34,12 +40,11 @@ namespace BarryTheBaker
                 Console.WriteLine($"   {pieCounts.Item1 - pieCounts.Item2} apple pies WITHOUT cinnamon");
 
                 var remainingIngredients = applePieCalculator.CalculateLeftOverIngredients(pieCounts.Item1, userInputIngredients);
-                Console.WriteLine("You have the following ingredients left over:");
-                Console.WriteLine($"   Apples {remainingIngredients[Ingredient.Apples].Quantity}");
-                Console.WriteLine($"   Sugar {remainingIngredients[Ingredient.Sugar].Quantity}");
-                Console.WriteLine($"   Flour {remainingIngredients[Ingredient.Flour].Quantity}");
-                Console.WriteLine($"   Cinnamon {remainingIngredients[Ingredient.Cinnamon].Quantity}");
-                Console.WriteLine($"   Butter {remainingIngredients[Ingredient.Butter].Quantity}");
+                Console.WriteLine("You have the following ingredients remaining:");
+                foreach(var ingredient in remainingIngredients){
+                    RecipeIngredient recipeIngredient = ingredient.Value;
+                    Console.WriteLine($"   {recipeIngredient.Ingredient} {remainingIngredients[recipeIngredient.Ingredient].Quantity}");    
+                }
             } while (!DoesUserWantToQuit());
 
         }
@@ -50,7 +55,8 @@ namespace BarryTheBaker
             return string.Equals(input, "Q", StringComparison.OrdinalIgnoreCase);
         }
 
-        private static void AskUserForInput(string question, Ingredient ingredient, MeasurementType measurement){
+
+        private static RecipeIngredient AskUserForIngredientQuantity(string question, Ingredient ingredient, MeasurementType measurement){
             Console.WriteLine(question);
             decimal userInput = 0;
             if(decimal.TryParse(Console.ReadLine(), out userInput)){
@@ -58,10 +64,12 @@ namespace BarryTheBaker
                 if(ingredient == Ingredient.Butter) {
                     userInput *= 8;
                 }
-                userInputIngredients.Add(ingredient, new RecipeIngredient(ingredient, userInput, measurement));
+                return new RecipeIngredient(ingredient, userInput, measurement);
             } else {
                 Console.WriteLine("Must be a number!");
+                return null;
             } 
         }
+
     }
 }
