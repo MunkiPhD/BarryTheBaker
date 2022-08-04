@@ -45,8 +45,10 @@ namespace BarryTheBaker
         }
 
         public static void DisplayQuantityResultsToUser(RecipeGenerationResults results){
+            ArgumentNullException.ThrowIfNull(results); // once it comes out of preview, can set parameter to be results!! which will null check the param
+            
             // and now, lets print some stuff
-            Console.WriteLine($"\n\nYou can make: {results.MaxQuantity} {results.Recipe.Name}!");
+            Console.WriteLine($"\n\nYou can make: {results.MaxQuantity} {results?.Recipe?.Name}!");
             //TODO: figure out how to print recipes quantities and recipe quantities with optionals
                 // Console.WriteLine($"   {pieCounts.Item2} es with cinnamon");
                 // Console.WriteLine($"   {pieCounts.Item1 - pieCounts.Item2} apple pies WITHOUT cinnamon");
@@ -54,7 +56,7 @@ namespace BarryTheBaker
             Console.WriteLine("You have the following ingredients remaining:");
             foreach(var ingredient in results.RemainingIngredients){
                 RecipeIngredient recipeIngredient = ingredient.Value;
-                Console.WriteLine($"   {recipeIngredient.Ingredient} {recipeIngredient.Quantity}");    
+                Console.WriteLine($"   {recipeIngredient.Quantity} {recipeIngredient.Measurement} {recipeIngredient.Ingredient} ");    
             }
         }
 
