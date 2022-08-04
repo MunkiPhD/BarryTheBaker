@@ -43,12 +43,14 @@ public class RecipeCreationCalculator {
 
         return new RecipeGenerationResults(){
             MaxQuantity = maxNumberOfRecipe, 
-            RemainingIngredients = remainingIngredients
+            RemainingIngredients = remainingIngredients,
+            Recipe = recipe
         };
     }
 }
 
 public class RecipeGenerationResults {
     public int MaxQuantity {get;set;}
-    public IDictionary<Ingredient, RecipeIngredient> RemainingIngredients {get;set;}
+    public IDictionary<Ingredient, RecipeIngredient>? RemainingIngredients {get;set;}
+    public IRecipe? Recipe {get;set;}
 }

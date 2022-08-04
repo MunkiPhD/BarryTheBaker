@@ -5,7 +5,7 @@ namespace BarryTheBaker
 {
     class BakeryStart
     {
-        private static Dictionary<Ingredient, RecipeIngredient> userInputIngredients = new Dictionary<Ingredient, RecipeIngredient>();
+        
         static void Main(string[] args)
         {
             // want to maximize the number of apple pies we can make.
@@ -29,7 +29,13 @@ namespace BarryTheBaker
                 int recipeSelection = 0;
                 if(int.TryParse(Console.ReadLine(), out recipeSelection)){
                     if(recipeList.ContainsKey(recipeSelection)){
-                        CollectInputForRecipeSelection(recipeList[recipeSelection]);
+                        IRecipe recipe = recipeList[recipeSelection];
+                        var userInputs = CollectInputForRecipeSelection(recipe);
+
+                        // create the generic calculator that will do stuff for us
+                        var generationResults = new RecipeCreationCalculator().MaxQuantity(recipe, userInputs);
+                        DisplayQuantityResultsToUser(generationResults);
+                        
                     } else {
                         Console.WriteLine("That's not a valid selection!");
                     }
@@ -38,41 +44,41 @@ namespace BarryTheBaker
 
         }
 
+        public static void DisplayQuantityResultsToUser(RecipeGenerationResults results){
+            // and now, lets print some stuff
+            Console.WriteLine($"\n\nYou can make: {results.MaxQuantity} {results.Recipe.Name}!");
+            //TODO: figure out how to print recipes quantities and recipe quantities with optionals
+                // Console.WriteLine($"   {pieCounts.Item2} es with cinnamon");
+                // Console.WriteLine($"   {pieCounts.Item1 - pieCounts.Item2} apple pies WITHOUT cinnamon");
+
+            Console.WriteLine("You have the following ingredients remaining:");
+            foreach(var ingredient in results.RemainingIngredients){
+                RecipeIngredient recipeIngredient = ingredient.Value;
+                Console.WriteLine($"   {recipeIngredient.Ingredient} {recipeIngredient.Quantity}");    
+            }
+        }
+
         /// <summary>
         /// Collects input from the user of how much inventory of ingredients they have on hand for the selected recipe
         /// </summary>
         /// <param name="recipe">Recipe to calculate quantity of that can be made</param>
-        public static void CollectInputForRecipeSelection(IRecipe recipe){
+        /// <returns>Dictionary of the ingredient and how much of that ingredient is available</returns>        
+        public static IDictionary<Ingredient, RecipeIngredient> CollectInputForRecipeSelection(IRecipe recipe){
              // everytime we go through the loop, we want to make sure we clear out all the items
-                userInputIngredients.Clear();
-
-                // this will need to get nuked once we add the cobbler
-                
-                foreach(var ingredient in recipe.Ingredients){
-                    RecipeIngredient recipeIngredient = ingredient.Value;
-                    var userIngredientInput = AskUserForIngredientQuantity($"Quantity of {recipeIngredient.Ingredient} ({recipeIngredient.Measurement}) in inventory?", recipeIngredient.Ingredient, recipeIngredient.Measurement);
-                     if(userIngredientInput != null) {
-                        userInputIngredients.Add(userIngredientInput.Ingredient, userIngredientInput);
-                    } else { 
-                        break;
-                    }
+            IDictionary<Ingredient, RecipeIngredient> userInputIngredients = new Dictionary<Ingredient, RecipeIngredient>();
+            // this will need to get nuked once we add the cobbler
+            
+            foreach(var ingredient in recipe.Ingredients){
+                RecipeIngredient recipeIngredient = ingredient.Value;
+                var userIngredientInput = AskUserForIngredientQuantity($"Quantity of {recipeIngredient.Ingredient} ({recipeIngredient.Measurement}) in inventory?", recipeIngredient.Ingredient, recipeIngredient.Measurement);
+                    if(userIngredientInput != null) {
+                    userInputIngredients.Add(userIngredientInput.Ingredient, userIngredientInput);
+                } else { 
+                    break;
                 }
+            }
 
-                // create the generic calculator that will do stuff for us
-                var recipeCalculator = new RecipeCreationCalculator();
-                var generationResults = recipeCalculator.MaxQuantity(recipe, userInputIngredients);
-
-                // and now, lets print some stuff
-                Console.WriteLine($"\n\nYou can make: {generationResults.MaxQuantity} {recipe.Name}!");
-                //TODO: figure out how to print recipes quantities and recipe quantities with optionals
-                    // Console.WriteLine($"   {pieCounts.Item2} es with cinnamon");
-                    // Console.WriteLine($"   {pieCounts.Item1 - pieCounts.Item2} apple pies WITHOUT cinnamon");
-
-                Console.WriteLine("You have the following ingredients remaining:");
-                foreach(var ingredient in generationResults.RemainingIngredients){
-                    RecipeIngredient recipeIngredient = ingredient.Value;
-                    Console.WriteLine($"   {recipeIngredient.Ingredient} {recipeIngredient.Quantity}");    
-                }
+            return userInputIngredients;
         }
 
         public static bool DoesUserWantToQuit(){
