@@ -11,9 +11,15 @@ Requirement #2: They forgot to tell us that apple pies require butter! we need 6
 
 Requirement #3: Since it sells out every time, Barry the Baker has decided to make blueberry cobbler a staple in the shop. The recipe is:
   4 cups blueberries (fresh or frozen)
+  
   1 lemon zest
+  
   5 tablespoons butter
+  
   1 cup all-purpose flour
+  
   1 cup granulated sugar
+  
   1 cup milk
+  
   1 tsp ground cinnamon
