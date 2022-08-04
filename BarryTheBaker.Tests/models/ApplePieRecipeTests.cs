@@ -11,6 +11,12 @@ public class ApplePieRecipeTests
     }
 
     [Fact]
+    public void ReturnsTheCorrectRecipeName(){
+        var recipe = new ApplePieRecipe();
+        Assert.Equal("Apple Pie", recipe.Name);
+    }
+
+    [Fact]
     public void ApplePieRecipe_HasCorrectIngredientCounts(){
         var applePieRecipe = new ApplePieRecipe();
         var ingredients = applePieRecipe.Ingredients;

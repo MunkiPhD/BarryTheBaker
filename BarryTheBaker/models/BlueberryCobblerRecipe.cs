@@ -1,6 +1,9 @@
 public class BlueberryCobblerRecipe:IRecipe {
     public IDictionary<Ingredient, RecipeIngredient> Ingredients {get;}
 
+    public string Name => "Blueberry Cobbler";
+
+
     public BlueberryCobblerRecipe(){
         // setup all the ingredients for this
         Ingredients = new Dictionary<Ingredient, RecipeIngredient>();

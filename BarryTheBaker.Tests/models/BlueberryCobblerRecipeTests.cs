@@ -12,7 +12,11 @@ public class BlueberryCobblerRecipeTests {
         Assert.Equal(1, recipe.Ingredients[Ingredient.Sugar].Quantity);
         Assert.Equal(1, recipe.Ingredients[Ingredient.Milk].Quantity);
         Assert.Equal(1, recipe.Ingredients[Ingredient.Cinnamon].Quantity);
+    }
 
-
+    [Fact]
+    public void ReturnsTheCorrectRecipeName(){
+        var recipe = new BlueberryCobblerRecipe();
+        Assert.Equal("Blueberry Cobbler", recipe.Name);
     }
 }

@@ -6,11 +6,11 @@ public class ApplePieQuantityCalculatorTests {
     public void GivenExactQuantitiesForOnePie_ReturnsOnePie()
     {
         // Given
-        var ingredients = new ApplePieRecipe().Ingredients;
-        var calculator = new ApplePieQuantityCalculator();
-        var maxPies = calculator.MaxNumberOfPies(ingredients);
-        Assert.Equal(1, maxPies.Item1);
-        Assert.Equal(1, maxPies.Item2);
+        var recipe = new ApplePieRecipe();
+        var recipeCalculator = new RecipeCreationCalculator();
+        var generationResults = recipeCalculator.MaxQuantity(recipe, recipe.Ingredients);
+
+        Assert.Equal(1, generationResults.MaxQuantity);
     }
 
     [Fact]
